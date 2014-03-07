@@ -1,71 +1,66 @@
 $ ->
 
   # Create simonArray
-  # simonArray = []
+  simonArray = []
   # #Create userArray
   userArray = []
   #number of clicks for each level
   clickCounter = 0
-
-  $(".game-button").on "click" , (e) ->
-  clickCounter++
-  choice = parseInt ($(@).data('index'))
-  userArray.push choice
-  # checkChoice()
-  console.log userArray
-  console.log choice 
-  console.log clickCounter
+  levelCounter = 1
 
 
-  # #Start Game
-  # $('#start-game').on 'click', (e) ->
-  #   clearGame()
-  #   $(@).hide()
-  
   # #Add to Simon Array - add a random number between 0-3 to the array simonArray
-  # addToSimonArray: ->
-  #   simonArray.push #(RANDOM NUMBER GENERATED BETWEEN 0-3)
+  addToSimonArray = ->
+    min = 0
+    max = 4
+    # x = Math.floor(Math.random() * (max - min + 1)) + min
+    x = 2
+    simonArray.push x
 
-  # clearUserArray: ->
+  clearGame = ->
+    simonArray = []
+    userArray = []
+    clickCounter = 0
 
-  # #display pattern with lights
-  # runLevel: ->
-  #   addToSimonArray()
-  #   #flash buttons in simonArray
-  #   #tell user it's their turn
-  #   clickCounter = 0
-    
-  #   if win
-  #     clearUserArray()
-  #   addToSimonArray()
-  #   #set userArray to null
-  #   userArray = []
+  newLevel = ->
+    userArray = []
+    clickCounter = 0
+    addToSimonArray()
+    levelCounter++
+    console.log levelCounter
 
-  #   checkChoice: (choice) ->
-  #     if userArray([clickCounter]) == simonArray[(clickCounter)]
-  #       true
-  #     else
-  #       endGame()
-   
+  endGame = ->
+    console.log "Game Over"
+    clearGame()
 
 
+  checkChoice = ->
+    console.log userArray
+    console.log simonArray
+    console.log clickCounter
 
-  #   #1.add data-index of button clicked to userArray
-  #   #2 check the value of that index with the same index in simonArray
-  #   # if true
-  #   # else endGame
+    if userArray[clickCounter] == simonArray[clickCounter]
+      console.log true
+      clickCounter++
+    else
+      console.log false
+      endGame()
 
-  #   #once userArray.length = simonArray.length, level complete, add new number to simonArray
+  runLevel = ->
 
-  # endGame: ->
+    addToSimonArray()
 
-  # clearGame: ->
+    $(".game-button").on "click" , (e) ->
+      choice = parseInt ($(@).data('index'))
+      userArray.push choice
+      checkChoice()
+
+      if userArray.length == simonArray.length
+        newLevel()
 
 
- 
-
-  # #Add to User Array - when user clicks a game-button, add the data-index of that button to the array userArray
-  # #value in index(x) of UserArray == value in index(x) of simonArray
-  
-
-
+    #Start Game
+  $('#start-game').on 'click', (e) ->
+    clearGame()
+    $(@).hide()
+    runLevel()
